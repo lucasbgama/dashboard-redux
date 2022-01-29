@@ -1,4 +1,7 @@
 export enum ActionTypes {
     UPDATE_LIST = 'update-list',
-    FETCH = 'fetch'
+    ADD_TO_LIST = 'add-to-list',
+    EDIT_USER = 'edit-user',
+    FETCH = 'fetch',
+    ERROR = 'error',
 }
