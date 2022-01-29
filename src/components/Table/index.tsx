@@ -14,9 +14,12 @@ import { Box } from '@mui/system';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { User } from '../../api';
 import { Route } from '../../routes';
 import { State } from '../../state';
 import Modal  from '../Modal';
+
+type Order = "asc" | "desc";
 
 
 export default function Table() {
@@ -31,6 +34,21 @@ export default function Table() {
       setSelectedUser(id);
       setIsModalOpen(true);
   }, []);
+  const [sorted, setSorted] = useState(false);
+  const [order, setOrder] = useState<Order>("desc");
+
+  const toggleSort = useCallback(() => {
+      setSorted(true);
+      setOrder((prevState) => prevState === 'asc' ? 'desc' : 'asc');
+  }, [])
+
+  const sortCallback = useCallback((a: User, b: User) => {
+      if (!sorted) return 0;
+      if (order === 'asc') {
+          return a.username.localeCompare(b.username);
+      }
+      return b.username.localeCompare(a.username);
+  }, [sorted, order])
 
   return (
     <>
@@ -49,7 +67,7 @@ export default function Table() {
                 <TableRow>
                     <TableCell>Id</TableCell>
                     <TableCell align="right">Name</TableCell>
-                    <TableCell align="right">Username</TableCell>
+                    <TableCell sortDirection={sorted ? order : false} align="right" onClick={toggleSort}>Username</TableCell>
                     <TableCell align="right">Email</TableCell>
                     <TableCell align="right">City</TableCell>
                     <TableCell align="right">Edit</TableCell>
@@ -57,7 +75,7 @@ export default function Table() {
                 </TableRow>
                 </TableHead>
                 <TableBody>
-                {usersList.list.map((row) => (
+                {usersList.list.slice().sort(sortCallback).map((row) => (
                     <TableRow
                     key={row.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
