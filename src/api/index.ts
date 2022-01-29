@@ -2,7 +2,9 @@ export interface User {
     id: string;
     name: string;
     username: string;
-    city: string;
+    address: {
+        city: string;
+    };
     email: string;
 };
 
