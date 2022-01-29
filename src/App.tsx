@@ -1,8 +1,14 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actionCreators } from './state';
 
 function App() {
+  const dispatch = useDispatch();
+  const { getList } = bindActionCreators(actionCreators, dispatch);
+  getList();
   return (
     <div className="App">
       <header className="App-header">
