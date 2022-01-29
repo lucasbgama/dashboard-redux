@@ -17,11 +17,16 @@ interface AddToListAction {
 
 interface EditUserAction {
     type: ActionTypes.EDIT_USER,
-    payload: { id: Number } & Partial<User>,
+    payload: { id: number } & Partial<User>,
 }
 
 interface ErrorAction {
     type: ActionTypes.ERROR,
 }
 
-export type Action = UpdateListAction | FetchAction | AddToListAction | ErrorAction | EditUserAction;
+interface DeleteUserAction {
+    type: ActionTypes.DELETE_USER,
+    payload: number;
+}
+
+export type Action = UpdateListAction | FetchAction | AddToListAction | ErrorAction | EditUserAction | DeleteUserAction;

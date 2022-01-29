@@ -56,3 +56,22 @@ export const editUser = (id: number, editions: Partial<User>) => {
         }      
     }
 }
+
+export const deleteUser = (id: number) => {
+    return async (dispatch: AppDispatch) => {
+        try {
+            dispatch({ type: ActionTypes.FETCH });
+            await fetch(`${API_URL}/${id}`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "DELETE",
+            });
+            dispatch({ type: ActionTypes.DELETE_USER, payload: id });
+        } catch(e) {
+            console.log(e);
+            dispatch({ type: ActionTypes.ERROR });
+        }      
+    }
+}
