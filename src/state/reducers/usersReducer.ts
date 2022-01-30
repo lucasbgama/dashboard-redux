@@ -25,9 +25,9 @@ const reducer = (state: UserState = initialState, action: Action) => {
         case ActionTypes.ADD_TO_LIST:
             return { ...state, isFetching: false, error: false, list: [...state.list, action.payload]}
         case ActionTypes.EDIT_USER:
-            return { ...state, isFetching: false, error: false, list: state.list.map((storedUser) => storedUser.id === action.payload.id ? {...storedUser, ...action.payload } : storedUser)}
+            return { ...state, isFetching: false, error: false, list: state.list.map((storedUser) => storedUser.id === action.payload.id ? action.payload : storedUser)}
         case ActionTypes.DELETE_USER:
-            return { ...state, error: false, list: state.list.filter((storedUser) => storedUser.id !== action.payload )}
+            return { ...state, error: false, isFetching: false, list: state.list.filter((storedUser) => storedUser.id !== action.payload )}
         case ActionTypes.ERROR:
             return { ...state, isFetching: false, error: true };
         default:

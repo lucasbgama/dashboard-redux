@@ -17,7 +17,7 @@ interface AddToListAction {
 
 interface EditUserAction {
     type: ActionTypes.EDIT_USER,
-    payload: { id: number } & Partial<User>,
+    payload: User,
 }
 
 interface ErrorAction {

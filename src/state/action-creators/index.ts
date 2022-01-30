@@ -41,7 +41,7 @@ export const editUser = (id: number, editions: Partial<User>) => {
     return async (dispatch: AppDispatch) => {
         try {
             dispatch({ type: ActionTypes.FETCH });
-            await fetch(`${API_URL}/${id}`, {
+            const user = await fetch(`${API_URL}/${id}`, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -49,7 +49,8 @@ export const editUser = (id: number, editions: Partial<User>) => {
                 method: "PATCH",
                 body: JSON.stringify(editions)
             });
-            dispatch({ type: ActionTypes.EDIT_USER, payload: { ...editions, id } });
+            const userJson: User = await user.json();
+            dispatch({ type: ActionTypes.EDIT_USER, payload: userJson });
         } catch(e) {
             console.log(e);
             dispatch({ type: ActionTypes.ERROR });
