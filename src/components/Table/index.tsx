@@ -9,8 +9,8 @@ import {
     Typography,
     Button,
     Grid,
+    TableSortLabel,
 } from '@mui/material';
-import { Box } from '@mui/system';
 import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -20,7 +20,6 @@ import { State } from '../../state';
 import Modal  from '../Modal';
 
 type Order = "asc" | "desc";
-
 
 export default function Table() {
   const usersList = useSelector((state: State) => state.users);
@@ -52,27 +51,28 @@ export default function Table() {
 
   return (
     <>
-        <Box>
-            <Grid container spacing={12}>
-                <Grid item xs={6}>
-                    <Typography variant="h2">User</Typography>
+        <Paper elevation={1} sx={{ width: '80%', margin: '0 auto', height: '100vh' }}>
+            <Grid container justifyContent="space-between" sx={{ width: '90%', margin: '30px auto' }}>
+                <Grid item>
+                    <Typography variant="h4">User list</Typography>
                 </Grid>
-                <Grid item xs={6}>
-                    <Button component={Link} to={Route.ADD_USER}>Add new</Button>
+                <Grid item>
+                    <Button component={Link} to={Route.ADD_USER} variant="contained" sx={{ padding: '5px 40px', textTransform: 'none' }}>Add new</Button>
                 </Grid>
             </Grid>
-            <TableContainer component={Paper}>
-            <MuiTable sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                <TableHead>
-                <TableRow>
-                    <TableCell>Id</TableCell>
-                    <TableCell align="right">Name</TableCell>
-                    <TableCell sortDirection={sorted ? order : false} align="right" onClick={toggleSort}>Username</TableCell>
-                    <TableCell align="right">Email</TableCell>
-                    <TableCell align="right">City</TableCell>
-                    <TableCell align="right">Edit</TableCell>
-                    <TableCell align="right">Delete</TableCell>
-                </TableRow>
+            <TableContainer component={Paper} elevation={2} sx={{ width: '90%', margin: '30px auto' }}>
+            <MuiTable size="small" aria-label="a dense table">
+                <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                    <TableRow >
+                        <TableCell sx={{ padding: '25px' }}>Id</TableCell>
+                        <TableCell align="center">Name</TableCell>
+                        <TableCell sortDirection={sorted ? order : false} align="center" onClick={toggleSort}>
+                            <TableSortLabel active={sorted} direction={order}>Username</TableSortLabel></TableCell>
+                        <TableCell align="center">Email</TableCell>
+                        <TableCell align="center">City</TableCell>
+                        <TableCell align="center">Edit</TableCell>
+                        <TableCell align="center">Delete</TableCell>
+                    </TableRow>
                 </TableHead>
                 <TableBody>
                 {usersList.list.slice().sort(sortCallback).map((row) => (
@@ -80,21 +80,21 @@ export default function Table() {
                     key={row.id}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" sx={{ padding: '25px' }}>
                         {row.id}
                     </TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
-                    <TableCell align="right">{row.username}</TableCell>
-                    <TableCell align="right">{row.email}</TableCell>
-                    <TableCell align="right">{row.address.city}</TableCell>
-                    <TableCell align="right"><Button component={Link} to={`${Route.EDIT_USER}/${row.id}`}>edit</Button></TableCell>
-                    <TableCell align="right"><Button onClick={() => handleOpenModal(row.id)}>delete</Button></TableCell>
+                    <TableCell align="center">{row.name}</TableCell>
+                    <TableCell align="center">{row.username}</TableCell>
+                    <TableCell align="center">{row.email}</TableCell>
+                    <TableCell align="center">{row.address.city}</TableCell>
+                    <TableCell align="center"><Button sx={{ textTransform: 'none', color: 'white', width: '80px' }} color="warning" variant="contained" component={Link} to={`${Route.EDIT_USER}/${row.id}`}>edit</Button></TableCell>
+                    <TableCell align="center"><Button sx={{ textTransform: 'none', width: '80px' }} color="error" variant="contained" onClick={() => handleOpenModal(row.id)}>delete</Button></TableCell>
                     </TableRow>
                 ))}
                 </TableBody>
             </MuiTable>
             </TableContainer>
-        </Box>
+        </Paper>
         <Modal open={isModalOpen} onClose={handleCloseModal} id={selectedUser!} />
     </>
   );

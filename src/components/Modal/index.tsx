@@ -1,9 +1,10 @@
-import { Typography, Modal as MuiModal, Button } from "@mui/material";
+import { Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { FC, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../state";
+import CloseIcon from '@mui/icons-material/Close';
 
 interface ModalProps {
     open: boolean;
@@ -21,15 +22,35 @@ const Modal: FC<ModalProps> = ({ open, onClose, id }) => {
       onClose?.({}, "backdropClick");
     }, [id, deleteUser, onClose]);
 
+    const closeCallback = useCallback(() => {
+      onClose?.({}, "backdropClick");
+    }, [onClose]);
+
     return (
-      <MuiModal open={open} onClose={onClose}>
-        <>
+      <Dialog open={open} onClose={onClose} fullWidth>
+        <DialogTitle>Delete
+          {
+            <IconButton
+              onClick={closeCallback}
+              sx={{
+                position: 'absolute',
+                right: 8,
+                top: 8,
+              }}>
+              <CloseIcon />
+            </IconButton>
+          }
+        </DialogTitle>
+        <DialogContent dividers>
           <Box>
             <Typography>{`Are you sure you want to delete user ${id}?`}</Typography>
           </Box>
-          <Button onClick={onDeleteUser}>Delete</Button>
-        </>
-      </MuiModal>
+          <DialogActions>
+            <Button onClick={closeCallback} color="neutral" variant="contained" sx={{ textTransform: 'none' }} >Cancel</Button>
+            <Button onClick={onDeleteUser} color="error" variant="contained" sx={{ textTransform: 'none' }} >Delete</Button>
+        </DialogActions>
+        </DialogContent>
+      </Dialog>
     );
   }
 
